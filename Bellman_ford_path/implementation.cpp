@@ -259,6 +259,12 @@ int traveling(int matrix[][1000], int num_vertices, char start){
         cout<<"Has a negative cycle"<<endl; 
     }
 }
+void printarr(int arr[100], int num){
+    for(int i = 0; i < num; i++){
+        cout<<arr[i]<<" "; 
+    }
+    cout<<endl;
+}
 int main() { 
     int number_vertices = 6;
     int matrix[number_vertices][1000] = {
