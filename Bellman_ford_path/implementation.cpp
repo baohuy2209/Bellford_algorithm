@@ -3,7 +3,7 @@
 #include <fstream>
 #define INF 1000000
 using namespace std;
-
+int X[100]; // luu cau hinh 
 // Định nghĩa enum từ A đến Z
 enum Vertices {
     A, B, C, D, E, F, G, H, I, J,
@@ -122,7 +122,7 @@ char convert_enum_to_char(int vertices){
             return 'Z'; 
     }
 }
-void BF(int matrix[][1000], int *value, int *previous,int number_vertices, char start){
+void BF(int matrix[][1000], int number_vertices, char start,int *value, int *previous){
     int a = convert_char_to_enum(start); 
     value[a] = 0; 
     for(int u = 0;  u < number_vertices; u++){
@@ -201,7 +201,30 @@ string BF_path(int matrix[][1000], int num_vertices, char start, char end){
         return short_path; 
     }
 }
+void backtracking_traveling(int i, int cost, string& short_path, int& result_cost, int cost_min, int number_vertice, int visited[], int matrix[20][20], int previous[], int source){
+    for(int j = 0; j < number_vertice; j++){
+        if(visited[j] == 0){
+            visited[j] = 1; 
+            X[i] = j // luu vertice 
+            cost +=  matrix[X[i-1]][X[i]];
+            if(i == n){
+                if(previous[0] == j){
+                    result_cost = min(result_cost, cost+matrix[X[i]][0]); 
+                    char endpoint = convert_enum_to_char(source);
+                    string str(1, endpoint);  
+                    short_path += " "+str; 
+                }else{
+                    return; 
+                }
+            }else if(((cost + (number_vertice-i+1)*cost_cost) < result_cost) && (previous[j] = source)){
+                short_path
+                backtracking_traveling(i+1, cost, )
+            }
+        }
+    }
+}
 int traveling(int matrix[][1000], int num_vertices, char start){
+    string result = ""; 
     int value[num_vertices]; 
     int previous[num_vertices]; 
     for(int i = 0 ; i < num_vertices ; i++){
@@ -214,7 +237,7 @@ int traveling(int matrix[][1000], int num_vertices, char start){
     for(int i = 1; i < num_vertices; i++){
         for(int u = 0; u < num_vertices; u++){
             for(int v = 0; v < num_vertices; v++){
-                int weight = matrix[u][v]; 
+                int weight = G[u][v]; 
                 if(weight == 0){
                     continue; 
                 }else{
@@ -229,7 +252,7 @@ int traveling(int matrix[][1000], int num_vertices, char start){
     bool has_negative_cycle = false; 
     for(int u = 0; u < num_vertices; u++){
         for(int v = 0; v < num_vertices; v++){
-            int weight = matrix[u][v];
+            int weight = G[u][v];
             if(weight == 0){
                 continue; 
             }else{
@@ -242,22 +265,12 @@ int traveling(int matrix[][1000], int num_vertices, char start){
     }
     if(!has_negative_cycle){
         // short_path(source, destination, previous); 
-        for(int i = 0; i < num_vertices; i++){
-            if(i == source){
-                continue; 
-            }else{
-                string short_path = "";
-                print_path(i, previous,short_path);
-                char end = convert_enum_to_char(i);  
-                string str_end(1,end); 
-                short_path = short_path+" "+str_end; 
-                cout<<short_path<<endl; 
-            }
-        }
-        return source; 
+        
     }else{
         cout<<"Has a negative cycle"<<endl; 
+        return result; 
     }
+    return result; 
 }
 void printarr(int arr[100], int num){
     for(int i = 0; i < num; i++){
@@ -279,11 +292,14 @@ int main() {
     cout<<"Exercise 1 : "<<endl; 
     int value[number_vertices] = {0, 10, 5, 18, INF, INF}; 
     int previous[number_vertices] = {-1, 0, 0, 0, -1, -1}; 
-    BF(matrix, value, previous, number_vertices, 'A'); 
-    cout<<"Value: "<<endl; 
-    printarr(value, number_vertices); 
-    cout<<"Previous: "<<endl; 
-    printarr(previous, number_vertices); 
+    for(int i = 1 ; i <= 5; i++){
+        BF(matrix, number_vertices, 'A',value, previous); 
+        cout<<"Step"<<i<<endl; 
+        cout<<"Value: "<<endl; 
+        printarr(value, number_vertices); 
+        cout<<"Previous: "<<endl; 
+        printarr(previous, number_vertices); 
+    }
     cout<<"================================================"<<endl; 
     cout<<"================================================"<<endl; 
     cout<<"Exercise 2 : "<<endl; 
