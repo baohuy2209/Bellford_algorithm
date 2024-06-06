@@ -1,4 +1,3 @@
-#define INF 1000000
 enum Vertices {
     A, B, C, D, E, F, G, H, I, J,
     K, L, M, N, O, P, Q, R, S, T,
@@ -59,7 +58,7 @@ enum Vertices convert_char_to_enum(char mychar){
     }
     return Vertices::Z; 
 }
-void BF(int matrix[20][20], int number_vertices, char start,int *value, int *previous){
+void BF(int matrix[20][20], int number_vertices, char start,int value[20], int previous[20]){
     int a = convert_char_to_enum(start); 
     value[a] = 0; 
     for(int u = 0;  u < number_vertices; u++){
@@ -68,9 +67,22 @@ void BF(int matrix[20][20], int number_vertices, char start,int *value, int *pre
             if(weight == 0){
                 continue; 
             }else{
-                if((value[u] + weight < value[v])&& (value[u] != INF)){
-                    value[v] = value[u]+weight;
-                    previous[v] = u;   
+                if(value[v] == -1){
+                    if(value[u] != -1){
+                        value[v] = value[u] + weight; 
+                        previous[v] = u; 
+                    }else {
+                        break; 
+                    }
+                }else{
+                    if(value[u] == -1){
+                        break;
+                    }else{
+                        if((value[u] + weight < value[v])){
+                            value[v] = value[u]+weight;
+                            previous[v] = u;   
+                        }
+                    }
                 }
             }
         }

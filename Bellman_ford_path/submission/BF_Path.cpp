@@ -136,7 +136,7 @@ string BF_Path(int matrix[][20], int num_vertices, char start, char end){
     int destination = convert_char_to_enum(end);
     value[source] = 0; // source 
 
-    for(int i = 1; i < num_vertices; i++){
+    for(int i = 0; i < num_vertices; i++){
         for(int u = 0; u < num_vertices; u++){
             for(int v = 0; v < num_vertices; v++){
                 int weight = matrix[u][v]; 
@@ -151,30 +151,10 @@ string BF_Path(int matrix[][20], int num_vertices, char start, char end){
             }
         }
     }
-    bool has_negative_cycle = false; 
-    for(int u = 0; u < num_vertices; u++){
-        for(int v = 0; v < num_vertices; v++){
-            int weight = matrix[u][v];
-            if(weight == 0){
-                continue; 
-            }else{
-                if((value[u] + weight < value[v]) && (value[u] != INF)){
-                    has_negative_cycle = true; 
-                    break; 
-                }
-            }
-        }
-    }
-    if(!has_negative_cycle){
-        // short_path(source, destination, previous); 
-        print_path(destination, previous, short_path); 
-        string str_end(1,end); 
-        reverse(short_path.begin(), short_path.end()+1);
-        short_path = short_path+" "+str_end; 
-        short_path = short_path.substr(1);
-        return short_path; 
-    }else{
-        cout<<"Has a negative cycle"<<endl; 
-        return short_path; 
-    }
+    print_path(destination, previous, short_path); 
+    string str_end(1,end); 
+    reverse(short_path.begin(), short_path.end()+1);
+    short_path = short_path+" "+str_end; 
+    short_path = short_path.substr(1);
+    return short_path; 
 }

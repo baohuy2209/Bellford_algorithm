@@ -115,108 +115,49 @@ char convert_enum_to_char(int vertices){
     }
     return 'Z'; 
 }
-void backtracking_traveling(int i, int cost, string &short_path, int& result_cost, int cost_min, int number_vertice, int visited[], int matrix[20][20], int previous[], int source){
+void backtracking_traveling(int i, int cost, string &short_path, string short_temp,int &result_cost, int cost_min, int number_vertice, int visited[], int matrix[20][20], int source){
     for(int j = 0; j < number_vertice; j++){
         if(visited[j] == 0){
             visited[j] = 1; 
             x[i] = j; // luu vertice 
             cost +=  matrix[x[i-1]][x[i]];
-            char dest = convert_enum_to_char(x[i]); 
-            string dest_str(1, dest); 
-            short_path += dest_str+" "; 
-            if(i == number_vertice){
-                if(previous[source] == j){
-                    if(result_cost > cost+matrix[x[i]][source]){
-                        result_cost = cost+matrix[x[i]][source]; 
-                    }
-                    result_cost = min(result_cost, cost+matrix[x[i]][source]); 
-                    char endpoint = convert_enum_to_char(source);
-                    string str(1, endpoint);  
-                    short_path += str; 
-                }else{
-                    return; 
+            if(i == number_vertice-1){
+                if(result_cost > cost+matrix[x[i]][source]){
+                    result_cost = cost+matrix[x[i]][source];
+                    short_path = short_temp; 
                 }
-            }else if(((cost + (number_vertice-i+1)*cost_min) < result_cost) && (previous[j] = source)){
-                backtracking_traveling(i+1, cost, short_path, result_cost, cost_min, number_vertice, visited, matrix, previous, source); 
+            }else if(((cost + (number_vertice-i+1)*cost_min) < result_cost)){
+                backtracking_traveling(i+1, cost, short_path, short_temp+string(1, convert_enum_to_char(x[i])), result_cost, cost_min, number_vertice, visited, matrix, source); 
             }
             visited[j] = 0; 
             cost -= matrix[x[i-1]][x[i]]; 
-            short_path.pop_back(); 
+            short_temp.erase(short_temp.length() - 2); 
         }
     }
 }
-string traveling(int matrix[20][20], int num_vertices, char start){
-    string result = ""; 
-    int value[num_vertices]; 
-    int previous[num_vertices]; 
-    for(int i = 0 ; i < num_vertices ; i++){
-        value[i] = INF; 
-        previous[i] = -1; 
-    }
-    int source = convert_char_to_enum(start);
-    value[source] = 0; // source 
-
-    for(int i = 1; i < num_vertices; i++){
-        for(int u = 0; u < num_vertices; u++){
-            for(int v = 0; v < num_vertices; v++){
-                int weight = matrix[u][v]; 
-                if(weight == 0){
-                    continue; 
-                }else{
-                    if(value[u] + weight < value[v]){
-                        value[v] = value[u]+weight; 
-                        previous[v] = u; 
-                    }
-                }
+string Traveling(int matrix[20][20], int num_vertices, char start){
+    string str_start(1, start); 
+    string result = str_start+" "; 
+    string temp = str_start+" "; 
+    int result_cost = INF; 
+    int cmin = INF; 
+    for(int i = 0; i < num_vertices; i++){
+        for(int j = 0; j < num_vertices; j++){
+            if(matrix[i][j] != 0){
+                cmin = min(cmin, matrix[i][j]);
             }
         }
     }
-    bool has_negative_cycle = false; 
-    for(int u = 0; u < num_vertices; u++){
-        for(int v = 0; v < num_vertices; v++){
-            int weight = matrix[u][v];
-            if(weight == 0){
-                continue; 
-            }else{
-                if(value[u] + weight < value[u]){
-                    has_negative_cycle = true; 
-                    break; 
-                }
-            }
-        }
+    int visited[100]; 
+    for(int i = 0; i < num_vertices; i++){
+        visited[i] = 0; 
     }
-    if(!has_negative_cycle){
-        // short_path(source, destination, previous); 
-        int min_cost = INF; 
-        int cmin = matrix[0][0]; 
-        for(int i = 0; i < num_vertices; i++){
-            for(int j = 0; j < num_vertices; j++){
-                if(matrix[i][j] == 0){
-                    continue; 
-                }else{  
-                    if(matrix[i][j] < cmin){
-                        cmin = matrix[i][j];
-                    }
-                }
-            }
-        }
-        int visited[100]; 
-        for(int i = 0; i < num_vertices; i++){
-            visited[i] = 0; 
-        }
-        visited[source] = 1; // danh dau da di tu diem bat dau 
-        x[0] = source; 
-        string short_path = ""; 
-        int cost = 0; 
-// void backtracking_traveling(int i, int cost, string& short_path, int& result_cost, int cost_min, int number_vertice, int visited[], int matrix[20][20], int previous[], int source){
-
-        backtracking_traveling(1, cost, short_path, min_cost, cmin, num_vertices, visited, matrix, previous, source); 
-        result = short_path; 
-        return result;
-        
-    }else{
-        cout<<"Has a negative cycle"<<endl; 
-        return result; 
-    }
+    int source = convert_char_to_enum(start); 
+    visited[source] = 1; // danh dau da di tu diem bat dau 
+    x[0] = source; 
+    int cost = 0; 
+    backtracking_traveling(1, cost, result , temp,result_cost, cmin, num_vertices, visited, matrix, source); 
+    result += str_start; 
     return result; 
+
 }
