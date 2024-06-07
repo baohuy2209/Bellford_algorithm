@@ -72,11 +72,11 @@ void BF(int matrix[20][20], int number_vertices, char start,int value[20], int p
                         value[v] = value[u] + weight; 
                         previous[v] = u; 
                     }else {
-                        break; 
+                        continue; 
                     }
                 }else{
                     if(value[u] == -1){
-                        break;
+                        continue; 
                     }else{
                         if((value[u] + weight < value[v])){
                             value[v] = value[u]+weight;

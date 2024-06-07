@@ -121,13 +121,16 @@ void backtracking_traveling(int i, int cost, string &short_path, string short_te
             visited[j] = 1; 
             x[i] = j; // luu vertice 
             cost +=  matrix[x[i-1]][x[i]];
+            char dest = convert_enum_to_char(x[i]); 
+            string dest_str(1, dest); 
+            short_temp += dest_str+" "; 
             if(i == number_vertice-1){
                 if(result_cost > cost+matrix[x[i]][source]){
                     result_cost = cost+matrix[x[i]][source];
                     short_path = short_temp; 
                 }
             }else if(((cost + (number_vertice-i+1)*cost_min) < result_cost)){
-                backtracking_traveling(i+1, cost, short_path, short_temp+string(1, convert_enum_to_char(x[i])), result_cost, cost_min, number_vertice, visited, matrix, source); 
+                backtracking_traveling(i+1, cost, short_path, short_temp, result_cost, cost_min, number_vertice, visited, matrix, source); 
             }
             visited[j] = 0; 
             cost -= matrix[x[i-1]][x[i]]; 
